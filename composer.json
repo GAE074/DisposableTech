@@ -1,0 +1,20 @@
+{
+    "name": "DisposableTech",
+    "type": "phpvms-module",
+    "description": "A module for Aircraft/Subfleet Technical Specifications and World Runways",
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\DisposableTech\\Providers\\TechServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\DisposableTech\\": "."
+        }
+    }
+}

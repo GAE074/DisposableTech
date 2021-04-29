@@ -1,0 +1,16 @@
+{
+    "name": "DisposableTech",
+    "alias": "disposabletech",
+    "description": "A module for Aircraft/Subfleet Technical Specifications and World Runways",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\DisposableTech\\Providers\\TechServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "helpers_tech.php"
+    ],
+    "requires": []
+}
