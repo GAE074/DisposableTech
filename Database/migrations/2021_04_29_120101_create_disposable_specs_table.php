@@ -9,14 +9,18 @@ class CreateDisposableSpecsTable extends Migration
   public function up()
   {
     if (Schema::hasTable('turksim_specs')) {
-      // Rename Indexes
+      // Drop Indexes : for MariaDB compatibility
       Schema::table('turksim_specs', function (Blueprint $table) {
-        $table->renameIndex('turksim_specs_id_unique', 'disposable_specs_id_unique');
-        $table->renameIndex('turksim_specs_id_index', 'disposable_specs_id_index');
+        $table->dropIndex('turksim_specs_id_index');
+        $table->dropUnique('turksim_specs_id_unique');
       });
-      // Rename TurkSim Specs Table
+      // Rename Table
       Schema::rename('turksim_specs', 'disposable_specs');
-
+      // Add Indexes Back
+      Schema::table('disposable_specs', function (Blueprint $table) {
+        $table->index('id');
+        $table->unique('id');
+      });
     } else {
       // Create Disposable Specs Table
       Schema::create('disposable_specs', function (Blueprint $table) {

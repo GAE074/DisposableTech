@@ -8,15 +8,19 @@ class CreateDisposableRunwaysTable extends Migration
 {
   public function up()
   {
-    if (Schema::hasTable('turksim_runways')) {    
-      // Rename Indexes
+    if (Schema::hasTable('turksim_runways')) {
+      // Drop Indexes : for MariaDB compatibility
       Schema::table('turksim_runways', function (Blueprint $table) {
-        $table->renameIndex('turksim_runways_id_unique', 'disposable_runways_id_unique');
-        $table->renameIndex('turksim_runways_id_index', 'disposable_runways_id_index');
+        $table->dropIndex('turksim_runways_id_index');
+        $table->dropUnique('turksim_runways_id_unique');
       });
       // Rename Table
       Schema::rename('turksim_runways', 'disposable_runways');
-
+      // Add Indexes Back
+      Schema::table('disposable_runways', function (Blueprint $table) {
+        $table->index('id');
+        $table->unique('id');
+      });
     } else {
       // Create Disposable Runways Table
       Schema::create('disposable_runways', function (Blueprint $table) {
