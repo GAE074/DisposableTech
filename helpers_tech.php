@@ -84,7 +84,7 @@ if (!function_exists('Dispo_CheckWeights')) {
       }
       // Do The Final Check and Return
       if($pirepwgt && $specwgt && $pirepwgt->value > $specwgt) { 
-        return "<span class='badge badge-danger'>OVERWEIGHT !</span>";
+        return "<span class='badge badge-danger ml-1 mr-1' title='Max: ".number_format($specwgt)." ".setting('units.weight')."'>OVERWEIGHT !</span>";
       } 
     }
   }
