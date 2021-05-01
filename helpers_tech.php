@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Pirep;
+use App\Models\PirepFieldValue;
 use Modules\DisposableTech\Models\Disposable_Specs;
 use Modules\DisposableTech\Models\Disposable_Runways;
 
@@ -41,5 +43,49 @@ if (!function_exists('Dispo_GetRunways')) {
   function Dispo_GetRunways($icao) {
     $runways = Disposable_Runways::where('airport', $icao)->orderby('runway_ident', 'asc')->get();
     return $runways;
+  }
+}
+
+if (!function_exists('Dispo_CheckWeights')) {
+  // Check Weights of a Pirep According to Specs
+  // Return formatted string (with html tags)
+  function Dispo_CheckWeights($pirepid, $slug) {   
+    if(stripos($slug, '-weight') !== false) 
+    {
+      $specwgt = null;
+      $specselect = 'bew';
+      if($slug === 'ramp-weight') { $specselect = 'mrw';}
+      elseif($slug === 'takeoff-weight') { $specselect = 'mtow';}
+      elseif($slug === 'landing-weight') { $specselect = 'mlw';}
+
+      $pirep = Pirep::where('id', $pirepid)->first();
+
+      if($pirep && $slug) {
+        $pirepwgt = PirepFieldValue::select('id', 'value')->where('pirep_id', $pirep->id)->where('slug', $slug)->first();
+        $pirepac = PirepFieldValue::select('id', 'value')->where('pirep_id', $pirep->id)->where('slug', 'aircraft')->first();
+      }
+
+      if($pirepac) {
+        $specs = Disposable_Specs::select('id', 'stitle', $specselect)->where('aircraft_id', $pirep->aircraft_id)
+                              ->whereNotNull('stitle')->whereNotNull($specselect)->where('active', 1)
+                              ->orwhere('subfleet_id', $pirep->aircraft->subfleet_id)
+                              ->whereNotNull('stitle')->whereNotNull($specselect)->where('active', 1)
+                              ->get();
+        foreach($specs as $spec) {
+          if(stripos($pirepac->value, $spec->stitle) !== false) {
+            $specwgt = $spec->$specselect;
+          }
+        }
+      }
+
+      // Check User Weight Settings and Convert Pirep Weight
+      if($pirepwgt && setting('units.weight') === 'kg') {
+        $pirepwgt->value = $pirepwgt->value / 2.20462262185 ;
+      }
+      // Do The Final Check and Return
+      if($pirepwgt && $specwgt && $pirepwgt->value > $specwgt) { 
+        return "<span class='badge badge-danger'>OVERWEIGHT !</span>";
+      } 
+    }
   }
 }
