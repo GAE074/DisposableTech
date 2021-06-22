@@ -78,6 +78,7 @@ class TechSpecsController extends Controller
     Disposable_Specs::create([
       'aircraft_id' => $aircraft_id,
       'subfleet_id' => $subfleet_id,
+      'airframe_id' => $request->airframe_id,
       'bew'         => $request->bew,
       'dow'         => $request->dow,
       'mzfw'        => $request->mzfw,
@@ -137,6 +138,7 @@ class TechSpecsController extends Controller
       'id'          => $request->id,
       'aircraft_id' => $aircraft_id,
       'subfleet_id' => $subfleet_id,
+      'airframe_id' => $request->airframe_id,
       'bew'         => $request->bew,
       'dow'         => $request->dow,
       'mzfw'        => $request->mzfw,

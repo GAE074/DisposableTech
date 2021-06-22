@@ -4,6 +4,7 @@
   const paxwgt = Math.round({{ $pax_weight }} + {{ $bag_weight }});
   const unitwgt = String("{{ setting('units.weight') }}");
   const rvr = String("{{ $sb_rvr ?? '500' }}");
+  const actype = String("{{ $aircraft->subfleet->simbrief_type ?? $aircraft->icao }}");
   const rmktext = String("{{ $sb_rmk ?? config('app.name') }}").toUpperCase();
   const kgstolbs = Number(2.20462262185);
   function ChangeSpecs() {
@@ -14,11 +15,13 @@
       document.getElementById("mtow").value = "--";
       document.getElementById("mlw").value = "--";
       document.getElementById("maxfuel").value = "--";
-      document.getElementById("fuelfactor").value = "P00";
+      document.getElementById("fuelfactor").value = "";
+      document.getElementById("type").value = actype;
       document.getElementById("acdata").value = "{'extrarmk':'RVR\/" + rvr +" RMK\/TCAS " + rmktext + "','paxwgt':" + paxwgt + "}";
       document.getElementById("tdPayload").title = "Calculation Not Possible !";
     } else {
       // Define Dividers
+      let d0 = str.search("#0#");
       let d1 = str.search("#1#");
       let d2 = str.search("#2#");
       let d3 = str.search("#3#");
@@ -31,7 +34,8 @@
       let d10 = str.search("#10#");
       let d11 = str.search("#11#");
       // Read Values Between Dividers
-      let id    = Number(str.slice(0, d1));
+      let id    = Number(str.slice(0,d0));
+      let sbaid = String(str.slice(d0+3,d1));
       let dow   = Number(str.slice(d1+3,d2));
       let mzfw  = Number(str.slice(d2+3,d3));
       let mtow  = Number(str.slice(d3+3,d4));
@@ -74,7 +78,12 @@
       if (sbff.length === 3) {
         document.getElementById("fuelfactor").value = sbff;
       } else {
-        document.getElementById("fuelfactor").value = "P00";
+        document.getElementById("fuelfactor").value = "";
+      }
+      if (sbaid.length > 2) {
+        document.getElementById("type").value = sbaid;
+      } else {
+        document.getElementById("type").value = actype;
       }
       // Provide A Clue About Possible Unlerload
       if (dow > 0 && mzfw > 0) {

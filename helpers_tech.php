@@ -29,7 +29,12 @@ if (!function_exists('Dispo_Specs')) {
   // Prepare The Specs Selection Dropdown value
   // Return String
   function Dispo_Specs($specs) {
-    $result = $specs->id."#1#".$specs->dow."#2#".$specs->mzfw."#3#".$specs->mtow."#4#".$specs->mlw."#5#".$specs->mfuel."#6#".$specs->fuelfactor."#7#";
+    $result = $specs->id."#0#".$specs->airframe_id."#1#".$specs->dow."#2#".$specs->mzfw."#3#".$specs->mtow."#4#".$specs->mlw."#5#".$specs->mfuel."#6#";
+    if(filled($specs->fuelfactor)) {
+      $result = $result.$specs->fuelfactor."#7#";
+    } else {
+      $result = $result."#7#";
+    }
     if(filled($specs->cat) && filled($specs->equip) && filled($specs->transponder) && filled($specs->pbn)) {
       $result = $result.$specs->cat."#8#".$specs->equip."#9#".$specs->transponder."#10#".$specs->pbn."#11#";
     }

@@ -141,9 +141,13 @@
             <label class="pl-1 mb-1" for="stitle">Simulator Aircraft Title</label>
             <input name="stitle" type="text" class="form-control" placeholder="Boeing B737-800X" maxlength="30" value="{{ $specs->stitle ?? '' }}">
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <label class="pl-1 mb-1" for="fuelfactor">Fuel Factor</label>
             <input name="fuelfactor" type="text" class="form-control" placeholder="P05" maxlength="3" value="{{ $specs->fuelfactor ?? '' }}">
+          </div>
+          <div class="col-sm-4">
+            <label class="pl-1 mb-1" for="airframe_id">SimBrief Airframe ID</label>
+            <input name="airframe_id" type="text" class="form-control" placeholder="1234_197815072021" maxlength="50" value="{{ $specs->airframe_id ?? '' }}">
           </div>
         </div>
         <div class="row" style="margin-bottom: 10px;">
